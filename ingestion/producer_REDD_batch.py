@@ -103,6 +103,7 @@ i=0
 starttime=time.time()
 producer = kafka_init(servers, topic)
 fileds, fileiter, labels, offsets, values = house_reader_REDD(datapath)
+
 # Get the first timestamps for each appliances
 first_values = values
 #print(offsets)
@@ -114,12 +115,17 @@ while True:
                 # timestamp in millisecond
                 timestamp = int(round(time.time() * 1000))
                 # check if the end of file and if the current time elaspe is larger than the next data point
-                if values[house_id][app_id] and (values[house_id][app_id][0]-first_values[house_id][app_id][0])/playbackspeed + offsets[house_id][app_id] + first_values[house_id][app_id][0] < timestamp:
-                    value = {"house_id": 1000+house_id, "appliance_id": app_id, "appliance_name": labels[house_id][app_id], "time": timestamp, "power": values[house_id][app_id][1]}
-                    producer.produce(topic, key='key', value=json.dumps(value), callback=acked)
-                    # read next row
-                    entries = next(row, None)
-                    values[house_id][app_id] = (int(entries[0])*1000, float(entries[1])) if entries else None
+                if values[house_id][app_id]:
+                    if (values[house_id][app_id][0]-first_values[house_id][app_id][0])/playbackspeed + offsets[house_id][app_id] + first_values[house_id][app_id][0] < timestamp:
+                        value = {"timestamp": timestamp, "house_id": 1000+house_id, "appliance_id": app_id, "appliance_name": labels[house_id][app_id], "power": values[house_id][app_id][1]}
+                        producer.produce(topic, key='key', value=json.dumps(value), callback=acked)
+                        # read next row
+                        entries = next(row, None)
+                        values[house_id][app_id] = (int(entries[0])*1000, float(entries[1])) if entries else None
+                else:
+                    fileds, fileiter, labels, offsets, values = house_reader_REDD(datapath)
+                    first_values = values
+                    # TO DO do this to individual files
         producer.flush()
     except KeyboardInterrupt:
         close_files(fileds)

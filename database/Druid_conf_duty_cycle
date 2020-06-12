@@ -1,0 +1,55 @@
+{
+  "type": "kafka",
+  "spec": {
+    "ioConfig": {
+      "type": "kafka",
+      "consumerProperties": {
+        "bootstrap.servers": "b-2.kafka.20h3jr.c4.kafka.us-east-1.amazonaws.com:9092,b-1.kafka.20h3jr.c4.kafka.us-east-1.amazonaws.com:9092"
+      },
+      "topic": "dutycycle",
+      "inputFormat": {
+        "type": "json"
+      },
+      "useEarliestOffset": true
+    },
+    "tuningConfig": {
+      "type": "kafka"
+    },
+    "dataSchema": {
+      "dataSource": "dutycycle",
+      "granularitySpec": {
+        "type": "uniform",
+        "queryGranularity": "MINUTE",
+        "segmentGranularity": "HOUR",
+        "rollup": true
+      },
+      "timestampSpec": {
+        "column": "time_end",
+        "format": "iso"
+      },
+      "dimensionsSpec": {
+        "dimensions": [
+          {
+            "type": "string",
+            "name": "appliance_id"
+          },
+          {
+            "type": "string",
+            "name": "house_id"
+          }
+        ]
+      },
+      "metricsSpec": [
+        {
+          "name": "count",
+          "type": "count"
+        },
+        {
+          "name": "sum_duty_cycle",
+          "type": "doubleSum",
+          "fieldName": "duty_cycle"
+        }
+      ]
+    }
+  }
+}
