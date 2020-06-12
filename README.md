@@ -1,4 +1,4 @@
-# Insight_DE_smart_grid
+# iGrid
 Insight 2020 May Data Engineering Project
 
 # Background
