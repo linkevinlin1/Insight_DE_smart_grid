@@ -55,47 +55,43 @@ query = PyDruid(druid_server, 'druid/v2')
 producer = kafka_init(kafka_servers, topic)
 
 starttime=time.time()
-while True:
 
-    then = datetime.now()
-    utc_timestamp = int(time.mktime(then.timetuple())*1e3 + then.microsecond/1e3 - convert_win * 1000 / 2 + 86400 * 1000 / playback)
-    print(utc_timestamp)
-    interval_list = [''] * lookbackdays
-    now = datetime.utcnow() - timedelta(seconds = convert_win + (60//playback) )
+then = datetime.now()
+utc_timestamp = int(time.mktime(then.timetuple())*1e3 + then.microsecond/1e3 - convert_win * 1000 / 2 + 86400 * 1000 / playback)
+print(utc_timestamp)
+interval_list = [''] * lookbackdays
+now = datetime.utcnow() - timedelta(seconds = convert_win + (60//playback) )
 
-    for i in range(lookbackdays):
-        now = now - timedelta(seconds = 86400 / playback)
-        interval_list[i] = now.replace(microsecond=0).isoformat() + '/pt' + str(convert_win*2) + 's'
-    interval_list.reverse()
-    print(interval_list)
-
+for i in range(lookbackdays):
+    now = now - timedelta(seconds = 86400 / playback)
+    interval_list[i] = now.replace(microsecond=0).isoformat() + '/pt' + str(convert_win*2) + 's'
+interval_list.reverse()
+print(interval_list)
 
 
 
-    group = query.groupby(
-        datasource='powerraw1_2',
-        granularity='all',
-        intervals=interval_list,
-        dimensions=["house_id", "appliance_id"],
-        aggregations={"count_w": longsum("count"), "sum_power_w": doublesum("sum_power")},
-        post_aggregations={'avg_power': (Field('sum_power_w') / Field('count_w'))}
-    )
 
-    df = query.export_pandas()
-    del df["count_w"]
-    del df["sum_power_w"]
-    del df["timestamp"]
+group = query.groupby(
+    datasource='powerraw1_2',
+    granularity='all',
+    intervals=interval_list,
+    dimensions=["house_id", "appliance_id"],
+    aggregations={"count_w": longsum("count"), "sum_power_w": doublesum("sum_power")},
+    post_aggregations={'avg_power': (Field('sum_power_w') / Field('count_w'))}
+)
 
-    #print(df)
+df = query.export_pandas()
+del df["count_w"]
+del df["sum_power_w"]
+del df["timestamp"]
 
-    time_json= {"timestamp": utc_timestamp}
+#print(df)
 
+time_json= {"timestamp": utc_timestamp}
 
-    for i, row in df.iterrows():
-        value_out = row.to_json()[:-1]+','+json.dumps(time_json)[1:]
-        producer.produce(topic, key='key', value = value_out, callback=acked)
-        print(value_out)
-        if i % 50 == 0:
-             producer.flush()
-
-    time.sleep(convert_win//2 - ((time.time() - starttime) % convert_win//2))
+for i, row in df.iterrows():
+    value_out = row.to_json()[:-1]+','+json.dumps(time_json)[1:]
+    producer.produce(topic, key='key', value = value_out, callback=acked)
+    print(value_out)
+    if i % 50 == 0:
+         producer.flush()
