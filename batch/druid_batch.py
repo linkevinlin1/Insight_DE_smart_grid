@@ -21,14 +21,15 @@ def load_config(file):
     config.read(file)
 
     druid_address = config['Druid']['address']
-    lookbackdays = config['Druid']['lookbackdays']
-    window = config['Druid']['window']
+    lookbackdays = int(config['Druid']['lookbackdays'])
+    window = int(config['Druid']['window'])
     brokers = config['KafkaBrokers']['address']
     out_topic = config['KafkaBrokers']['topic_batch']
+    in_topic = config['KafkaBrokers']['topic_rawdata']
     # how many time faster playback
     playbackspeed = int(config['Data']['playback_speed'])
 
-    return druid_address, lookbackdays, window, brokers, out_topic, playbackspeed
+    return druid_address, lookbackdays, window, brokers, in_topic, out_topic, playbackspeed
 
 
 def kafka_init(servers,topic):
@@ -60,7 +61,7 @@ def acked(err, msg):
 
 if __name__ == "__main__":
     _, config = sys.argv
-    druid_server, lookbackdays, window, brokers, out_topic, playback = load_config(config)
+    druid_server, lookbackdays, window, kafka_servers, in_topic, out_topic, playback = load_config(config)
     convert_win = int(window * 60 / 24)
 
     query = PyDruid(druid_server, 'druid/v2')
@@ -104,7 +105,7 @@ if __name__ == "__main__":
 
     for i, row in df.iterrows():
         value_out = row.to_json()[:-1]+','+json.dumps(time_json)[1:]
-        producer.produce(topic, key='key', value = value_out, callback=acked)
+        producer.produce(out_topic, key='key', value = value_out, callback=acked)
         print(value_out)
         if i % 50 == 0:
              producer.flush()
