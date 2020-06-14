@@ -10,17 +10,25 @@ import socket
 import time
 import json
 from datetime import datetime, timedelta
+import configparser
+import sys
 
-kafka_servers = 'b-1.kafka.0ofh61.c4.kafka.us-east-1.amazonaws.com:9092,b-2.kafka.0ofh61.c4.kafka.us-east-1.amazonaws.com:9092'
-topic = 'history'
-druid_server = 'http://ec2-34-206-118-121.compute-1.amazonaws.com:8082'
-#pd.set_option('display.max_columns', 500)
+def load_config(file):
+    """
+    Load config file
+    """
+    config = configparser.ConfigParser()
+    config.read(file)
 
-playback = 24 # n times
-window = 20  # in minutes
-convert_win = int(window * 60 / 24)
-lookbackdays = 5
-# output timestamp is at the middle of the window for next day
+    druid_address = config['Druid']['address']
+    lookbackdays = config['Druid']['lookbackdays']
+    window = config['Druid']['window']
+    brokers = config['KafkaBrokers']['address']
+    out_topic = config['KafkaBrokers']['topic_batch']
+    # how many time faster playback
+    playbackspeed = int(config['Data']['playback_speed'])
+
+    return druid_address, lookbackdays, window, brokers, out_topic, playbackspeed
 
 
 def kafka_init(servers,topic):
@@ -50,48 +58,53 @@ def acked(err, msg):
         #print("Message produced: %s" % (str(msg)))
 
 
-query = PyDruid(druid_server, 'druid/v2')
+if __name__ == "__main__":
+    _, config = sys.argv
+    druid_server, lookbackdays, window, brokers, out_topic, playback = load_config(config)
+    convert_win = int(window * 60 / 24)
 
-producer = kafka_init(kafka_servers, topic)
+    query = PyDruid(druid_server, 'druid/v2')
 
-starttime=time.time()
+    producer = kafka_init(kafka_servers, out_topic)
 
-then = datetime.now()
-utc_timestamp = int(time.mktime(then.timetuple())*1e3 + then.microsecond/1e3 - convert_win * 1000 / 2 + 86400 * 1000 / playback)
-print(utc_timestamp)
-interval_list = [''] * lookbackdays
-now = datetime.utcnow() - timedelta(seconds = convert_win + (60//playback) )
+    starttime=time.time()
 
-for i in range(lookbackdays):
-    now = now - timedelta(seconds = 86400 / playback)
-    interval_list[i] = now.replace(microsecond=0).isoformat() + '/pt' + str(convert_win*2) + 's'
-interval_list.reverse()
-print(interval_list)
+    then = datetime.now()
+    utc_timestamp = int(time.mktime(then.timetuple())*1e3 + then.microsecond/1e3 - convert_win * 1000 / 2 + 86400 * 1000 / playback)
+    print(utc_timestamp)
+    interval_list = [''] * lookbackdays
+    now = datetime.utcnow() - timedelta(seconds = convert_win + (60//playback) )
+
+    for i in range(lookbackdays):
+        now = now - timedelta(seconds = 86400 / playback)
+        interval_list[i] = now.replace(microsecond=0).isoformat() + '/pt' + str(convert_win*2) + 's'
+    interval_list.reverse()
+    print(interval_list)
 
 
 
 
-group = query.groupby(
-    datasource='powerraw1_2',
-    granularity='all',
-    intervals=interval_list,
-    dimensions=["house_id", "appliance_id"],
-    aggregations={"count_w": longsum("count"), "sum_power_w": doublesum("sum_power")},
-    post_aggregations={'avg_power': (Field('sum_power_w') / Field('count_w'))}
-)
+    group = query.groupby(
+        datasource = in_topic,
+        granularity='all',
+        intervals=interval_list,
+        dimensions=["house_id", "appliance_id"],
+        aggregations={"count_w": longsum("count"), "sum_power_w": doublesum("sum_power")},
+        post_aggregations={'avg_power': (Field('sum_power_w') / Field('count_w'))}
+    )
 
-df = query.export_pandas()
-del df["count_w"]
-del df["sum_power_w"]
-del df["timestamp"]
+    df = query.export_pandas()
+    del df["count_w"]
+    del df["sum_power_w"]
+    del df["timestamp"]
 
-#print(df)
+    #print(df)
 
-time_json= {"timestamp": utc_timestamp}
+    time_json= {"timestamp": utc_timestamp}
 
-for i, row in df.iterrows():
-    value_out = row.to_json()[:-1]+','+json.dumps(time_json)[1:]
-    producer.produce(topic, key='key', value = value_out, callback=acked)
-    print(value_out)
-    if i % 50 == 0:
-         producer.flush()
+    for i, row in df.iterrows():
+        value_out = row.to_json()[:-1]+','+json.dumps(time_json)[1:]
+        producer.produce(topic, key='key', value = value_out, callback=acked)
+        print(value_out)
+        if i % 50 == 0:
+             producer.flush()

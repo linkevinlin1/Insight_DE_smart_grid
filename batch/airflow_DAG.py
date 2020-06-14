@@ -2,9 +2,14 @@ from datetime import timedelta
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.utils.dates import days_ago
+import configparser
 
-window = 1  # in minutes
-inteval = window * 60 // 24 // 2
+config = configparser.ConfigParser()
+config.read('/home/ubuntu/config.ini')
+window = config['Druid']['window']
+playbackspeed = int(config['Data']['playback_speed'])
+inteval = window * 60 // playbackspeed // 2
+
 
 
 default_args = {
@@ -28,6 +33,6 @@ dag = DAG(
 
 task = BashOperator(
     task_id='batch_processing',
-    bash_command='cd /home/ubuntu ; python3 druid_batch.py',
+    bash_command='cd /home/ubuntu ; python3 druid_batch.py config.ini',
     dag=dag,
 )
