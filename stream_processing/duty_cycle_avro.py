@@ -46,7 +46,7 @@ avro_schema = """
 """
 
 
-kafka_servers = 'b-3.kafka.hasav4.c4.kafka.us-east-1.amazonaws.com:9092,b-1.kafka.hasav4.c4.kafka.us-east-1.amazonaws.com:9092,b-2.kafka.hasav4.c4.kafka.us-east-1.amazonaws.com:9092'
+kafka_servers = 'b-2.kafka6.2g20m5.c4.kafka.us-east-1.amazonaws.com:9092,b-1.kafka6.2g20m5.c4.kafka.us-east-1.amazonaws.com:9092,b-3.kafka6.2g20m5.c4.kafka.us-east-1.amazonaws.com:9092'
 in_topic = 'powerraw'
 out_topic = 'dutycycle'
 playbackspeed = 24
