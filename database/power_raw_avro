@@ -1,0 +1,180 @@
+{
+  "type": "kafka",
+  "spec": {
+    "dataSchema": {
+      "dataSource": "poweravro",
+      "timestampSpec": null,
+      "dimensionsSpec": null,
+      "metricsSpec": [
+        {
+          "type": "count",
+          "name": "count"
+        },
+        {
+          "type": "doubleSum",
+          "name": "sum_power",
+          "fieldName": "power",
+          "expression": null
+        }
+      ],
+      "granularitySpec": {
+        "type": "uniform",
+        "segmentGranularity": "HOUR",
+        "queryGranularity": "SECOND",
+        "rollup": true,
+        "intervals": null
+      },
+      "transformSpec": {
+        "filter": null,
+        "transforms": []
+      },
+      "parser": {
+        "type": "avro_stream",
+        "avroBytesDecoder": {
+          "type": "schema_inline",
+          "schema": {
+            "namespace": "powerraw",
+            "name": "valueall",
+            "type": "record",
+            "fields": [
+              {
+                "name": "house_id",
+                "type": "string"
+              },
+              {
+                "name": "appliance_name",
+                "type": "string"
+              },
+              {
+                "name": "appliance_id",
+                "type": "string"
+              },
+              {
+                "name": "timestamp",
+                "type": "long"
+              },
+              {
+                "name": "power",
+                "type": "float"
+              }
+            ]
+          }
+        },
+        "parseSpec": {
+          "format": "avro",
+          "timestampSpec": {
+            "column": "timestamp",
+            "format": "auto"
+          },
+          "dimensionsSpec": {
+            "dimensions": [
+              {
+                "type": "string",
+                "name": "appliance_name"
+              },
+              {
+                "type": "string",
+                "name": "appliance_id"
+              },
+              {
+                "type": "string",
+                "name": "house_id"
+              }
+            ]
+          },
+          "flattenSpec": {
+            "useFieldDiscovery": true,
+            "fields": [
+              {
+                "type": "root",
+                "name": "timestamp"
+              },
+              {
+                "type": "root",
+                "name": "house_id"
+              },
+              {
+                "type": "root",
+                "name": "appliance_id"
+              },
+              {
+                "type": "root",
+                "name": "appliance_name"
+              },
+              {
+                "type": "root",
+                "name": "power"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "ioConfig": {
+      "topic": "poweravro",
+      "inputFormat": null,
+      "replicas": 1,
+      "taskCount": 3,
+      "taskDuration": "PT3600S",
+      "consumerProperties": {
+        "bootstrap.servers": "b-3.kafka.hasav4.c4.kafka.us-east-1.amazonaws.com:9092,b-1.kafka.hasav4.c4.kafka.us-east-1.amazonaws.com:9092,b-2.kafka.hasav4.c4.kafka.us-east-1.amazonaws.com:9092"
+      },
+      "pollTimeout": 100,
+      "startDelay": "PT5S",
+      "period": "PT30S",
+      "useEarliestOffset": false,
+      "completionTimeout": "PT1800S",
+      "lateMessageRejectionPeriod": null,
+      "earlyMessageRejectionPeriod": null,
+      "lateMessageRejectionStartDateTime": null,
+      "stream": "poweravro",
+      "useEarliestSequenceNumber": false,
+      "type": "kafka"
+    },
+    "tuningConfig": {
+      "type": "kafka",
+      "maxRowsInMemory": 1000000,
+      "maxBytesInMemory": 0,
+      "maxRowsPerSegment": 5000000,
+      "maxTotalRows": null,
+      "intermediatePersistPeriod": "PT10M",
+      "basePersistDirectory": "/home/ubuntu/apache-druid-0.18.1/var/tmp/druid-realtime-persist5163803498768455157",
+      "maxPendingPersists": 0,
+      "indexSpec": {
+        "bitmap": {
+          "type": "roaring",
+          "compressRunOnSerialization": true
+        },
+        "dimensionCompression": "lz4",
+        "metricCompression": "lz4",
+        "longEncoding": "longs"
+      },
+      "indexSpecForIntermediatePersists": {
+        "bitmap": {
+          "type": "roaring",
+          "compressRunOnSerialization": true
+        },
+        "dimensionCompression": "lz4",
+        "metricCompression": "lz4",
+        "longEncoding": "longs"
+      },
+      "buildV9Directly": true,
+      "reportParseExceptions": false,
+      "handoffConditionTimeout": 0,
+      "resetOffsetAutomatically": false,
+      "segmentWriteOutMediumFactory": null,
+      "workerThreads": null,
+      "chatThreads": null,
+      "chatRetries": 8,
+      "httpTimeout": "PT10S",
+      "shutdownTimeout": "PT80S",
+      "offsetFetchPeriod": "PT30S",
+      "intermediateHandoffPeriod": "P2147483647D",
+      "logParseExceptions": false,
+      "maxParseExceptions": 2147483647,
+      "maxSavedParseExceptions": 0,
+      "skipSequenceNumberAvailabilityCheck": false,
+      "repartitionTransitionDuration": "PT120S"
+    }
+  }
+}

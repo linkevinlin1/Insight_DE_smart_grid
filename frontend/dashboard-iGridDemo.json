@@ -1,0 +1,400 @@
+{
+  "name": "a2d4",
+  "title": "iGrid Demo",
+  "readAccess": {
+    "access": "all"
+  },
+  "modifyAccess": {
+    "access": "single",
+    "users": [
+      "user"
+    ]
+  },
+  "enforceTimeFilter": false,
+  "pages": [
+    {
+      "name": "page",
+      "label": "New page",
+      "tiles": [
+        {
+          "name": "t9394",
+          "type": "visualization",
+          "title": "Current Total Power",
+          "canExpand": true,
+          "description": "",
+          "position": {
+            "width": 4,
+            "height": 4
+          },
+          "essence": {
+            "dataCube": "powerraw524a",
+            "filter": {},
+            "splits": [],
+            "selectedMeasures": [
+              "sumsum_-596"
+            ],
+            "pinnedDimensions": [],
+            "timezone": "America/New_York",
+            "visualization": "totals",
+            "auxiliaryMeasures": []
+          }
+        },
+        {
+          "name": "te920",
+          "type": "visualization",
+          "title": "Top 10 appliance category",
+          "canExpand": true,
+          "description": "",
+          "position": {
+            "width": 5,
+            "height": 6,
+            "y": 4
+          },
+          "essence": {
+            "dataCube": "powerraw524a",
+            "filter": {},
+            "splits": [
+              {
+                "dimension": "appliance_name",
+                "sortType": "measure",
+                "direction": "descending",
+                "limit": 10
+              }
+            ],
+            "selectedMeasures": [
+              "sumsum_-596"
+            ],
+            "pinnedDimensions": [],
+            "timezone": "America/New_York",
+            "visualization": "table",
+            "auxiliaryMeasures": []
+          }
+        },
+        {
+          "name": "t0a43",
+          "type": "visualization",
+          "title": "Top 10 household",
+          "canExpand": true,
+          "description": "",
+          "position": {
+            "width": 5,
+            "height": 6,
+            "x": 5,
+            "y": 4
+          },
+          "essence": {
+            "dataCube": "powerraw524a",
+            "filter": {},
+            "splits": [
+              {
+                "dimension": "house_id",
+                "sortType": "measure",
+                "direction": "descending",
+                "limit": 10
+              }
+            ],
+            "selectedMeasures": [
+              "sumsum_-596"
+            ],
+            "pinnedDimensions": [],
+            "timezone": "America/New_York",
+            "visualization": "table",
+            "auxiliaryMeasures": []
+          }
+        },
+        {
+          "name": "t680e",
+          "type": "visualization",
+          "title": "Top 10 appliances ids",
+          "canExpand": true,
+          "description": "",
+          "position": {
+            "width": 5,
+            "height": 6,
+            "x": 10,
+            "y": 4
+          },
+          "essence": {
+            "dataCube": "powerraw524a",
+            "filter": {},
+            "splits": [
+              {
+                "dimension": "appliance_id",
+                "sortType": "measure",
+                "direction": "descending",
+                "limit": 10
+              }
+            ],
+            "selectedMeasures": [
+              "sumsum_-596"
+            ],
+            "pinnedDimensions": [],
+            "timezone": "America/New_York",
+            "visualization": "table",
+            "auxiliaryMeasures": []
+          }
+        },
+        {
+          "name": "t5650",
+          "type": "visualization",
+          "title": "Duty Cycle in House 1_1_0",
+          "canExpand": true,
+          "description": "",
+          "position": {
+            "width": 4,
+            "height": 6,
+            "x": 15,
+            "y": 4
+          },
+          "essence": {
+            "dataCube": "3c48",
+            "filter": {
+              "clauses": [
+                {
+                  "dimension": "__time",
+                  "dynamic": {
+                    "op": "timeRange",
+                    "operand": {
+                      "op": "ref",
+                      "name": "m"
+                    },
+                    "duration": "PT5M",
+                    "step": -1
+                  }
+                },
+                {
+                  "dimension": "house_id",
+                  "action": "overlap",
+                  "values": {
+                    "setType": "STRING",
+                    "elements": [
+                      "1_1_0"
+                    ]
+                  },
+                  "exclude": false
+                }
+              ]
+            },
+            "splits": [
+              {
+                "dimension": "appliance_id",
+                "sortType": "measure",
+                "direction": "descending"
+              }
+            ],
+            "selectedMeasures": [
+              "sum_duty_cycle"
+            ],
+            "pinnedDimensions": [],
+            "timezone": "Etc/UTC",
+            "visualization": "table",
+            "auxiliaryMeasures": []
+          }
+        },
+        {
+          "name": "t7f11",
+          "type": "visualization",
+          "title": "Total Power trend",
+          "canExpand": true,
+          "description": "",
+          "position": {
+            "width": 9,
+            "height": 4,
+            "x": 4
+          },
+          "essence": {
+            "dataCube": "powerraw524a",
+            "filter": {},
+            "splits": [
+              {
+                "dimension": "__time",
+                "bucketAction": {
+                  "op": "timeBucket",
+                  "duration": "PT5S"
+                },
+                "sortType": "dimension",
+                "direction": "ascending"
+              }
+            ],
+            "selectedMeasures": [
+              "sumsum_-596"
+            ],
+            "pinnedDimensions": [],
+            "timezone": "Etc/UTC",
+            "visualization": "line-chart",
+            "visualizationOptions": {
+              "showOverall": "off"
+            },
+            "auxiliaryMeasures": []
+          }
+        },
+        {
+          "name": "t6597",
+          "type": "visualization",
+          "title": "History for house 1_1_0",
+          "canExpand": true,
+          "description": "Avg Power at this time of the day for the past 5 days",
+          "position": {
+            "width": 5,
+            "height": 6,
+            "x": 19,
+            "y": 4
+          },
+          "essence": {
+            "dataCube": "780f",
+            "filter": {
+              "clauses": [
+                {
+                  "dimension": "__time",
+                  "dynamic": {
+                    "op": "timeRange",
+                    "operand": {
+                      "op": "ref",
+                      "name": "m"
+                    },
+                    "duration": "PT5M",
+                    "step": -1
+                  }
+                },
+                {
+                  "dimension": "house_id",
+                  "action": "overlap",
+                  "values": {
+                    "setType": "STRING",
+                    "elements": [
+                      "1_1_0"
+                    ]
+                  },
+                  "exclude": false
+                }
+              ]
+            },
+            "splits": [
+              {
+                "dimension": "appliance_id",
+                "sortType": "measure",
+                "direction": "descending"
+              }
+            ],
+            "selectedMeasures": [
+              "sum_avg_power"
+            ],
+            "pinnedDimensions": [],
+            "timezone": "Etc/UTC",
+            "visualization": "table",
+            "auxiliaryMeasures": []
+          }
+        },
+        {
+          "name": "t84aa",
+          "type": "markdown",
+          "title": "Description of duty cycle metric",
+          "canExpand": true,
+          "description": "",
+          "position": {
+            "width": 4,
+            "height": 2,
+            "x": 15,
+            "y": 10
+          },
+          "content": "Time fraction of the appliance being used in the past 10 mins. (in 24x playback time)"
+        },
+        {
+          "name": "t8e33",
+          "type": "markdown",
+          "title": "Description for history metric",
+          "canExpand": true,
+          "description": "",
+          "position": {
+            "width": 5,
+            "height": 2,
+            "x": 19,
+            "y": 10
+          },
+          "content": "Avg Power at this time of the day for the past 5 days."
+        },
+        {
+          "name": "t7e4e",
+          "type": "markdown",
+          "title": "Note",
+          "canExpand": true,
+          "description": "",
+          "position": {
+            "width": 8,
+            "height": 2,
+            "y": 10
+          },
+          "content": "Due to the limited of Pivot, the refresh rate is low. The data processed is 24x faster than real time. "
+        },
+        {
+          "name": "ted5b",
+          "type": "visualization",
+          "title": "appliances in house: 1_1_0",
+          "canExpand": true,
+          "description": "",
+          "position": {
+            "width": 11,
+            "height": 4,
+            "x": 13
+          },
+          "essence": {
+            "dataCube": "powerraw524a",
+            "filter": {
+              "clauses": [
+                {
+                  "dimension": "__time",
+                  "dynamic": {
+                    "op": "timeRange",
+                    "operand": {
+                      "op": "ref",
+                      "name": "m"
+                    },
+                    "duration": "PT5M",
+                    "step": -1
+                  }
+                },
+                {
+                  "dimension": "house_id",
+                  "action": "overlap",
+                  "values": {
+                    "setType": "STRING",
+                    "elements": [
+                      "1_1_0"
+                    ]
+                  },
+                  "exclude": false
+                }
+              ]
+            },
+            "splits": [
+              {
+                "dimension": "__time",
+                "bucketAction": {
+                  "op": "timeBucket",
+                  "duration": "PT1S"
+                },
+                "sortType": "dimension",
+                "direction": "ascending"
+              },
+              {
+                "dimension": "appliance_id",
+                "sortType": "measure",
+                "direction": "descending"
+              }
+            ],
+            "selectedMeasures": [
+              "sumsum_-596"
+            ],
+            "pinnedDimensions": [],
+            "timezone": "America/New_York",
+            "visualization": "line-chart",
+            "auxiliaryMeasures": []
+          },
+          "legendSide": "right"
+        }
+      ]
+    }
+  ],
+  "hasGlobalCompare": true,
+  "hasGlobalMeasures": false
+}
