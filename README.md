@@ -7,7 +7,7 @@ Power outages cause economic loss. Due to the rise of WFH, it can be difficult f
 # Demo
 ![iGrid demo](https://i.imgur.com/2F2PrgF.gif)
 
-# Slide Seck
+# Slide Deck
 [Link](https://docs.google.com/presentation/d/1HAyDNhsujJUZnfdGOLu7pXEk-ypAYC32fLp_hgiTJZE/edit?usp=sharing)
 
 # Data pipeline
