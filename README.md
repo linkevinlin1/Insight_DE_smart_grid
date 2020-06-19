@@ -14,13 +14,13 @@ Power outages cause economic loss. Due to the rise of WFH, it can be difficult f
 ![pipeline](https://i.imgur.com/CpSyY04.png)
 
 # Repository Structure
-
+<pre>
 ├── batch:             batch processing python script with Airfow
 ├── data:              usage of GREEND and REDD data sets
 ├── database:          Druid config files
 ├── frontend:          Imply Pivot config files
 ├── ingestion:         Kafka producer scripts
 └── stream_processing: Spark Structured Streaming script
-
+</pre>
 
 More to come...
