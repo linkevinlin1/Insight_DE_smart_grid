@@ -11,7 +11,7 @@ Power outages cause economic loss. Due to the rise of WFH, it can be difficult f
 [Link](https://docs.google.com/presentation/d/1HAyDNhsujJUZnfdGOLu7pXEk-ypAYC32fLp_hgiTJZE/edit?usp=sharing)
 
 # Data pipeline
-![pipeline](https://i.imgur.com/CpSyY04.png)
+![pipeline](https://i.imgur.com/XnhVnkw.png)
 
 # Repository Structure
 <pre>
