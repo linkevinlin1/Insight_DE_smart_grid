@@ -12,17 +12,35 @@ import json
 from datetime import datetime, timedelta
 import configparser
 import sys
+from typing import Tuple
 
-def load_config(file):
+
+def load_config(filepath: str) -> Tuple[str, int, str, str, str, int]:
     """
     Load config file
+
+    @param filepath: path to config.ini
+
+    @return datapath: path to data folder
+
+    @return lookbackdays: how many days to look back for historical usage
+
+    @return window: the window to average for each day in minutes
+
+    @return brokers: kafka broker addresses
+
+    @return in_topic: datasource name in druid
+
+    @return out_topic: kafka topic to write to
+
+    @return playbackspeed: how many times faster to playback data
     """
     config = configparser.ConfigParser()
-    config.read(file)
+    config.read(pathfile)
 
-    druid_address = config['Druid']['address']
-    lookbackdays = int(config['Druid']['lookbackdays'])
-    window = int(config['Druid']['window'])
+    druid_address = config['Batch']['address']
+    lookbackdays = int(config['Batch']['lookbackdays'])
+    window = int(config['Batch']['window'])
     brokers = config['KafkaBrokers']['address']
     out_topic = config['KafkaBrokers']['topic_batch']
     in_topic = config['KafkaBrokers']['topic_rawdata']
@@ -32,61 +50,51 @@ def load_config(file):
     return druid_address, lookbackdays, window, brokers, in_topic, out_topic, playbackspeed
 
 
-def kafka_init(servers,topic):
-    '''
+def kafka_init(servers: str, topic: str):
+    """
     Set up kafka server
 
-    @type servers: STRING
     @param servers: all the bootstrap servers with ports, seperated with comma
 
-    @type topic: STRING
     @param topic: the name of the kafka topic
 
     @rtype: object
     @return: kafka producer
-    '''
-    conf = {'bootstrap.servers': servers,'client.id': socket.gethostname()}
+    """
+    conf = {'bootstrap.servers': servers, 'client.id': socket.gethostname()}
     producer = Producer(conf)
     return producer
 
+
 def acked(err, msg):
-    '''
+    """
     Used for kafka message acknowledgement
-    '''
+    """
     if err is not None:
         print("Failed to deliver message: %s: %s" % (str(msg), str(err)))
-    #else:
-        #print("Message produced: %s" % (str(msg)))
 
 
 if __name__ == "__main__":
     _, config = sys.argv
     druid_server, lookbackdays, window, kafka_servers, in_topic, out_topic, playback = load_config(config)
-    convert_win = int(window * 60 / 24)
-
+    convert_win = int(window * 60 / playback)
     query = PyDruid(druid_server, 'druid/v2')
-
     producer = kafka_init(kafka_servers, out_topic)
 
-    starttime=time.time()
-
     then = datetime.now()
-    utc_timestamp = int(time.mktime(then.timetuple())*1e3 + then.microsecond/1e3 - convert_win * 1000 / 2 + 86400 * 1000 / playback)
-    print(utc_timestamp)
+    utc_timestamp = int(time.mktime(then.timetuple())*1e3 + then.microsecond/1e3)
     interval_list = [''] * lookbackdays
-    now = datetime.utcnow() - timedelta(seconds = convert_win + (60//playback) )
+    now = datetime.utcnow() - timedelta(seconds = convert_win + (60//playback) ) # add little tolerance
 
+    # create time intervals for the past 5 days at this time of the day
     for i in range(lookbackdays):
         now = now - timedelta(seconds = 86400 / playback)
         interval_list[i] = now.replace(microsecond=0).isoformat() + '/pt' + str(convert_win*2) + 's'
     interval_list.reverse()
-    print(interval_list)
 
-
-
-
+    # Druid query
     group = query.groupby(
-        datasource = in_topic,
+        datasource=in_topic,
         granularity='all',
         intervals=interval_list,
         dimensions=["house_id", "appliance_id"],
@@ -99,13 +107,10 @@ if __name__ == "__main__":
     del df["sum_power_w"]
     del df["timestamp"]
 
-    #print(df)
-
     time_json= {"timestamp": utc_timestamp}
 
     for i, row in df.iterrows():
         value_out = row.to_json()[:-1]+','+json.dumps(time_json)[1:]
         producer.produce(out_topic, key='key', value = value_out, callback=acked)
-        print(value_out)
         if i % 50 == 0:
              producer.flush()

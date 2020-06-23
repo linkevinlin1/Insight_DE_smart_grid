@@ -2,7 +2,7 @@
   "type": "kafka",
   "spec": {
     "dataSchema": {
-      "dataSource": "poweravro",
+      "dataSource": "powerraw",
       "timestampSpec": null,
       "dimensionsSpec": null,
       "metricsSpec": [
@@ -111,13 +111,13 @@
       }
     },
     "ioConfig": {
-      "topic": "poweravro",
+      "topic": "powerraw",
       "inputFormat": null,
       "replicas": 1,
       "taskCount": 3,
       "taskDuration": "PT3600S",
       "consumerProperties": {
-        "bootstrap.servers": "b-3.kafka.hasav4.c4.kafka.us-east-1.amazonaws.com:9092,b-1.kafka.hasav4.c4.kafka.us-east-1.amazonaws.com:9092,b-2.kafka.hasav4.c4.kafka.us-east-1.amazonaws.com:9092"
+        "bootstrap.servers": "host1:9092,host2:9092"
       },
       "pollTimeout": 100,
       "startDelay": "PT5S",
