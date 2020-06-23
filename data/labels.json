@@ -1,0 +1,11 @@
+{
+    "building0": ["coffee machine", "washing machine", "radio", "water kettle", "fride w/ freezer", "dishwasher", "ktichen lamp", "TV", "vacuum cleaner"],
+    "building1": ["radio", "freezer", "dishwasher", "fridge", "washing machine", "water kettle", "blender", "network router"],
+    "building2": ["fridge", "dishwasher", "microwave", "water kettle", "washing machine", "radio w/ amplifier", "dryier", "kitchenware (mixer and fruit juicer)", "bedside light"],
+    "building3": ["TV", "NAS", "washing machine", "drier", "dishwasher", "notebook", "kitchenware", "coffee machine", "bread machine"],
+    "building4": ["entrance outlet", "dishwasher", "water kettle", "fridge w/o freezer", "washing machine", "hairdrier", "computer", "coffee machine", "TV"],
+    "building5": ["total outlets", "total lights", "kitchen TV", "living room TV", "fridge w/ freezer", "electric oven", "computer w/ scanner and printer", "washing machine", "hood"],
+    "building6": ["plasma TV", "lamp", "toaster", "hob", "iron", "computer w/ scanner and printer", "LCD TV", "washing machine", "fridge w/ freezer"],
+    "building7": ["hair dryer", "washing machine", "videogame console and radio", "dryer", "TV w/ decoder and computer in living room", "kitchen TV", "dishwasher", "total outlets", "total lights"],
+    "building8": ["kitchen TV", "dishwasher", "living room TV", "desktop computer w/ screen", "washing machine", "bedroom TV", "total outlets", "total lights"]
+    }
