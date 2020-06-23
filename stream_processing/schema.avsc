@@ -1,0 +1,27 @@
+{
+   "namespace": "powerraw",
+   "name": "valueall",
+   "type": "record",
+   "fields" : [
+     {
+       "name" : "house_id",
+       "type" : "string"
+     },
+     {
+       "name" : "appliance_name",
+       "type" : "string"
+     },
+     {
+       "name" : "appliance_id",
+       "type" : "string"
+     },
+     {
+       "name" : "timestamp",
+       "type" : "long"
+     },
+     {
+       "name" : "power",
+       "type" : "float"
+     }
+   ]
+}
