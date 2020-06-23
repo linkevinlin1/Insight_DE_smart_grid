@@ -81,3 +81,6 @@ Change the relevant address and import the specfications into datasources.
 <a id="1">[1]</a> S. D’Alessandro, A.M. Tonello, A. Monacchi, W. Elmenreich, “GREEND: An Energy Consumption Dataset of Households in Italy and Austria,” Proc. of IEEE SMARTGRIDCOMM 2014, Venice, Italy, November 3-6, 2014. \
 <a id="2">[2]</a> J. Zico Kolter and Matthew J. Johnson. REDD: A public data set for energy disaggregation research. In proceedings of the SustKDD workshop on Data Mining Applications in Sustainability, 2011.
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
