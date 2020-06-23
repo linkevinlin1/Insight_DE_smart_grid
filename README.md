@@ -35,8 +35,10 @@ The pipeline was designed to seperate fine-grain analysis (Spark) from coarse-gr
 
 # Instructions
 **Data sets**
-* The Reference Energy Disaggregation Data Set (**REDD**) [[1]](#1): The low frequency data set was used. 
-* **GREEND**: Energy Metering Data Set [[2]](#2): Version `GREEND_0-2_300615.zip` was used. Please refer to the instruction in `/data`. 
+* The Reference Energy Disaggregation Data Set (**REDD**) [[1]](#1): \
+The low frequency data set was used. 
+* **GREEND**: Energy Metering Data Set [[2]](#2): \
+Version `GREEND_0-2_300615.zip` was used. Please refer to the instruction in `/data`. 
 
 **Cluster setup** \
 (I strongly recommend future fellows to utilize AWS managed clusters.)
