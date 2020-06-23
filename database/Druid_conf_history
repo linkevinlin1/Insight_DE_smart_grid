@@ -6,7 +6,7 @@
       "consumerProperties": {
         "bootstrap.servers": "host1:9092,host2:9092"
       },
-      "topic": "dutycycle",
+      "topic": "history1",
       "inputFormat": {
         "type": "json"
       },
@@ -16,40 +16,33 @@
       "type": "kafka"
     },
     "dataSchema": {
-      "dataSource": "dutycycle",
+      "dataSource": "history",
       "granularitySpec": {
         "type": "uniform",
         "queryGranularity": "NONE",
         "segmentGranularity": "HOUR",
-        "rollup": true
+        "rollup": false
       },
       "timestampSpec": {
-        "column": "time_end",
-        "format": "iso"
+        "column": "timestamp",
+        "format": "millis"
       },
       "dimensionsSpec": {
         "dimensions": [
           {
-            "type": "string",
+            "type": "long",
             "name": "appliance_id"
           },
           {
-            "type": "string",
+            "type": "float",
+            "name": "avg_power"
+          },
+          {
+            "type": "long",
             "name": "house_id"
           }
         ]
-      },
-      "metricsSpec": [
-        {
-          "name": "count",
-          "type": "count"
-        },
-        {
-          "name": "sum_duty_cycle",
-          "type": "doubleSum",
-          "fieldName": "duty_cycle"
-        }
-      ]
+      }
     }
   }
 }
