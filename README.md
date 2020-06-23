@@ -29,8 +29,8 @@ The pipeline was designed to seperate fine-grain analysis (Spark) from coarse-gr
 
 # Repository Structure
 <pre>
-├── batch               batch processing python script with Airfow
-├── data                usage of GREEND and REDD data sets
+├── batch               Batch processing python script with Airfow
+├── data                Usage of GREEND and REDD data sets
 ├── database            Druid config files
 ├── example config      Example configuration file 
 ├── frontend            Imply Pivot config files
