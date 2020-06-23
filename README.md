@@ -4,7 +4,7 @@
 ![Druid](https://img.shields.io/badge/Druid-0.18.1-green)
 ![license](https://img.shields.io/github/license/linkevinlin1/Insight_DE_smart_grid)
 # iGrid
-Making power grid smarter. An Insight 2020 May Data Engineering Project by Kevin Yi-Wei Lin.
+Making the power grid smarter. An Insight 2020 May Data Engineering Project by Kevin Yi-Wei Lin.
 
 # Table of Contents
 1. [Background](README.md#Background)
