@@ -58,15 +58,15 @@ pip3 requirement files are in individual folders
 **Create Kafka Topics** \
 `powerraw`, `history` and `dutycycle`, where 6 partitions and replication factor 2 were used. 
 
+**Initiate Druid Datasources** \
+Change the relevant address and import the specfications into datasources.
+
 **Start Kafka Producers** 
 1. Change relevant parameters in `config.ini`
 2. Place the Python and Bash scripts, `config.ini` and `schema.avsc` under the same directory
 3. `./run_GREEND.sh [starting day shift] [ending day shift]` or  \
 `./run_REDD.sh [starting day shift] [ending day shift]` \
 This will replay the whole data set for each day shift specified in the argument. Do not do more than 20 playbacks on a single machine. 
-
-**Initiate Druid Datasources** \
-Change the relevant address and import the specfications into datasources.
 
 **Submit Spark Strutured Streaming Job** 
 1. Change relevant parameters in `config.ini` 
