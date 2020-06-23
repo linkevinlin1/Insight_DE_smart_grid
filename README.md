@@ -1,3 +1,8 @@
+![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)
+![Spark](https://img.shields.io/badge/Spark-2.4.5-green)
+![Kafka](https://img.shields.io/badge/Kafka-2.2.1-blue)
+![Druid](https://img.shields.io/badge/Druid-0.18.1-green)
+![license](https://img.shields.io/github/license/linkevinlin1/Insight_DE_smart_grid)
 # iGrid
 Making power grid smarter. An Insight 2020 May Data Engineering Project by Kevin Yi-Wei Lin.
 
@@ -71,7 +76,7 @@ Change the relevant address and import the specfications into datasources.
 **Start Batch Historcal Processing**
 1. Put `druid_batch.py` and `config.ini` under `/home/ubuntu`, or other path specified in the DAG file.
 2. Change relevant parameters in `config.ini`
-2. Put DAG script in dags folder and run in Airflow
+2. Put DAG script in dags folder and turn on in Airflow
 
 **Dashboard**
 1. Connect Pivot to Druid Datasources
