@@ -48,7 +48,7 @@ Version `GREEND_0-2_300615.zip` was used. Please refer to the instruction in `/d
 **Cluster setup** \
 (I strongly recommend future fellows to utilize AWS managed clusters.)
 * Kafka v2.2.1:  AWS MSK three m5.large nodes
-* Spark v2.4.5:  AWS EMR v5.30.1 three m5 large nodes (1 master and 2 workers) with bootstrap action script: 'stream_processing/init_emr.sh'
+* Spark v2.4.5:  AWS EMR v5.30.1 three m5 large nodes (1 master and 2 workers) with bootstrap action script: `stream_processing/init_emr.sh`
 * Druid v0.18.1:  single server "small" using i3.2xlarge
 * Kafka producers: four t2.xlarge
 * Batch with Airflow: t2.small
