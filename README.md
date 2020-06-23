@@ -24,7 +24,7 @@ Power outages cause economic loss. Due to the rise of WFH, it can be difficult f
 [Link](https://docs.google.com/presentation/d/1HAyDNhsujJUZnfdGOLu7pXEk-ypAYC32fLp_hgiTJZE/edit?usp=sharing)
 
 # Data pipeline
-The pipeline was designed to seperate fine-grain analysis (Spark) from coarse-grain analysis. The latter was possible with only a python script because of the roll-up on ingestion and powerful queries powered by Druid. The current setup can at least handle 100k msg/s with 10k appliances. \
+The pipeline was designed to seperate fine-grain analysis (Spark) from coarse-grain analysis. The latter was possible with only a python script because of the roll-up on ingestion and powerful queries powered by Druid. The current setup can at least handle 100k msg/s with 10k appliances. This mesage velocity is on the level of a single power distribution station. \
 ![pipeline](https://i.imgur.com/XnhVnkw.png)
 
 # Repository Structure
