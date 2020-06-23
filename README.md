@@ -1,6 +1,5 @@
 # iGrid
-Making power grid smarter. \
-Insight 2020 May Data Engineering Project
+Making power grid smarter. An Insight 2020 May Data Engineering Project
 
 # Table of Contents
 1. [Background](README.md#Background)
