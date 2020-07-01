@@ -80,7 +80,7 @@ This will replay the whole data set for each day shift specified in the argument
 
 **Dashboard**
 1. Connect Pivot to Druid Datasources
-2. Import dashboard config file
+2. Import dashboard config file `frontend/dashboard-iGridDemo.json`
 
 ## References
 <a id="1">[1]</a> J. Zico Kolter and Matthew J. Johnson. REDD: A public data set for energy disaggregation research. In proceedings of the SustKDD workshop on Data Mining Applications in Sustainability, 2011. \
